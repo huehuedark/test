@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Message for Pratiksha 💌</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            color: #333;
+            overflow: hidden;
+        }
+
+        #photo {
+            width: 200px;
+            height: auto;
+            border-radius: 50%;
+            border: 5px solid #ff6f91;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: #ff6f91;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff4b6e;
+        }
+
+        #message {
+            margin-top: 20px;
+            color: #ff3f6c;
+        }
+
+        /* Heart animation */
+        .heart {
+            position: absolute;
+            font-size: 24px;
+            color: #ff3f6c;
+            animation: float 5s linear infinite;
+            opacity: 0.8;
+            cursor: pointer;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .heart:hover {
+            transform: scale(2);
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-800px) scale(1.5); opacity: 0; }
+        }
+
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            opacity: 0.9;
+            pointer-events: none;
+            animation: confetti-fall 3s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(800px) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Pratiksha's Photo -->
+    <img src="YOUR_IMAGE_URL" alt="Pratiksha's Photo" id="photo">
+
+    <h1>Hey Pratiksha! 💖</h1>
+    <p>I have something special to tell you...</p>
+    <button onclick="showMessage()">Click me 💌</button>
+    <div id="message"></div>
+
+    <script>
+        // Floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * window.innerWidth + 'px';
+            heart.style.fontSize = (20 + Math.random() * 30) + 'px';
+            heart.style.animationDuration = (3 + Math.random() * 5) + 's';
+            heart.style.opacity = Math.random();
+            heart.innerText = '❤️';
+            document.body.appendChild(heart);
+
+            heart.addEventListener('transitionend', () => heart.remove());
+            setTimeout(() => heart.remove(), 5000);
+        }
+
+        setInterval(createHeart, 300);
+
+        // Confetti effect
+        function createConfetti() {
+            const colors = ['#ff4b6e', '#ffde7d', '#76ff7a', '#6cc5ff', '#ff6fff'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 4000);
+            }
+        }
+
+        // Messages array
+        const messages = [
+            "I can't love you perfectly but I can love you endlessly "
+            "I Until the ocean run start to dry"
+           
+            "Use my last breath just to call you mine
+I could love you for a whole lifetime"
+        ];
+
+        // Show messages one by one + confetti
+        function showMessage() {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = ""; // clear previous
+            createConfetti();
+
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i < messages.length) {
+                    const p = document.createElement('p');
+                    p.innerText = messages[i];
+                    messageDiv.appendChild(p);
+                    i++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 1500); // 1.5s delay between messages
+        }
+    </script>
+</body>
+</html>
