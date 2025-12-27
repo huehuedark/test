@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Avinya 🌸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --deep-rose: #880d1e;
+            --soft-pink: #fbc4ab;
+            --nature-pink: #ffb6c1;
+            --text-dark: #4a4a4a;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Quicksand', sans-serif;
+            background: #e0f2f1; /* Light sky blue */
+            overflow: hidden;
+            color: var(--text-dark);
+        }
+
+        /* --- Nature Background Elements --- */
+        .nature-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, #add8e6 0%, #fffafa 100%);
+            z-index: -5;
+        }
+
+        /* Animated Clouds */
+        .cloud {
+            position: fixed;
+            background: white;
+            width: 100px; height: 40px;
+            border-radius: 50px;
+            opacity: 0.8;
+            z-index: -4;
+            animation: moveClouds linear infinite;
+        }
+        .cloud::after, .cloud::before {
+            content: ''; position: absolute; background: white;
+            width: 50px; height: 50px; border-radius: 50%; top: -20px; left: 15px;
+        }
+        .cloud::before { width: 40px; height: 40px; top: -15px; left: 45px; }
+
+        @keyframes moveClouds {
+            from { left: -150px; }
+            to { left: 110vw; }
+        }
+
+        /* Swaying Tree */
+        .tree {
+            position: fixed;
+            bottom: -10px;
+            left: 5%;
+            font-size: 8rem;
+            z-index: -3;
+            transform-origin: bottom center;
+            animation: sway 4s ease-in-out infinite;
+            filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.1));
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        /* Flying Birds */
+        .bird {
+            position: fixed;
+            font-size: 1.5rem;
+            z-index: -3;
+            animation: fly 15s linear infinite;
+        }
+        @keyframes fly {
+            0% { left: -50px; top: 20%; transform: scaleX(1); }
+            49% { transform: scaleX(1); }
+            50% { left: 110vw; top: 10%; transform: scaleX(-1); }
+            100% { left: -50px; top: 20%; transform: scaleX(-1); }
+        }
+
+        /* Falling Petals */
+        .petal {
+            position: fixed;
+            background-color: var(--nature-pink);
+            border-radius: 150% 0 150% 0;
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: -1;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); }
+            100% { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        /* --- UI Elements --- */
+        .slide {
+            display: none;
+            height: 100vh;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .active { display: flex; }
+
+        h1, h2, .script-font {
+            font-family: 'Dancing Script', cursive;
+            color: var(--deep-rose);
+        }
+
+        .typewriter-text {
+            display: inline-block;
+            overflow: hidden;
+            border-right: 3px solid var(--deep-rose);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .10em;
+            animation: typing 3s steps(30, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--deep-rose); } }
+
+        .btn-heart {
+            background: var(--deep-rose);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(136, 13, 30, 0.3);
+            transition: transform 0.3s;
+            margin-top: 20px;
+        }
+        .btn-heart:hover { transform: scale(1.05); }
+
+        .meter-container {
+            width: 250px; height: 20px; background: #ddd;
+            border-radius: 10px; margin: 20px 0; border: 2px solid var(--deep-rose);
+            overflow: hidden;
+        }
+        .meter-fill { width: 0%; height: 100%; background: var(--deep-rose); }
+
+        .msg-grid { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 350px; }
+        .msg-box {
+            background: #2d0202; color: white; padding: 18px; border-radius: 12px;
+            cursor: pointer; transition: all 0.5s;
+        }
+        .msg-box.revealed { background: #ffffff; color: var(--deep-rose); border: 2px solid var(--deep-rose); }
+        .msg-box.hidden::after { content: "Tap to reveal ✨"; font-size: 0.8rem; opacity: 0.6; }
+
+        .envelope {
+            width: 280px; height: 180px; background: #f8ad9d;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15); border: 2px solid #f4978e;
+            cursor: pointer;
+        }
+        .heart-seal { font-size: 60px; position: relative; animation: pulse 1.5s infinite; }
+        .seal-label {
+            font-size: 0.7rem; color: white; font-weight: bold; position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+
+        .letter-content {
+            display: none; background: white; padding: 30px; border-radius: 15px;
+            max-width: 500px; line-height: 1.7; text-align: left;
+            border-top: 8px solid var(--deep-rose); box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .one-more-box {
+            background: white; border: 2px dashed var(--deep-rose);
+            padding: 40px; border-radius: 20px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nature-bg"></div>
+    <div class="tree">🌳</div>
+    <div class="bird">🕊️</div>
+    <div class="cloud" style="top: 10%; animation-duration: 25s;"></div>
+    <div class="cloud" style="top: 25%; animation-duration: 35s; animation-delay: -10s;"></div>
+    <div id="petals-container"></div>
+
+    <div class="slide active" id="slide1">
+        <h1 class="typewriter-text">Hey Avinya...</h1>
+        <h2 class="script-font">Do you know how beautiful you are?</h2>
+        <button class="btn-heart" onclick="nextSlide(2)">Open my heart ❤️</button>
+    </div>
+
+    <div class="slide" id="slide2">
+        <h2 class="script-font">Measuring your cuteness...</h2>
+        <div class="meter-container">
+            <div id="meter" class="meter-fill"></div>
+        </div>
+        <h3 id="status-text">Analyzing...</h3>
+        <h1 id="overflow-msg" style="display:none; color: var(--deep-rose);">TOO PRETTY TO HANDLE! 🔥</h1>
+        <button id="next2" style="display:none" class="btn-heart" onclick="nextSlide(3)">Continue 🌸</button>
+    </div>
+
+    <div class="slide" id="slide3">
+        <h2 class="script-font">Tap these, Avinya</h2>
+        <div class="msg-grid">
+            <div class="msg-box hidden" onclick="revealMsg(this, 'you look adorable')"></div>
+            <div class="msg-box hidden" onclick="revealMsg(this, 'you have the sweetest vibe')"></div>
+            <div class="msg-box hidden" onclick="revealMsg(this, 'you make things feel lighter')"></div>
+            <div class="msg-box hidden" onclick="revealMsg(this, 'you are naturally charming')"></div>
+            <div class="msg-box hidden" onclick="revealMsg(this, 'you make everything thing feel special')"></div>
+        </div>
+        <button id="next3" style="display:none" class="btn-heart" onclick="nextSlide(4)">Next</button>
+    </div>
+
+    <div class="slide" id="slide4">
+        <div id="envelope-wrapper" onclick="openEnvelope()">
+            <div class="envelope">
+                <span style="font-family:'Dancing Script'; color:white; font-size:1.5rem;">a note for you</span>
+                <div class="heart-seal">❤️<span class="seal-label">tap to open</span></div>
+            </div>
+        </div>
+        <div id="letter" class="letter-content">
+            <p><strong>Hey you 🌸</strong></p>
+            <p>I just want you to know how genuinely special you are. The way you smile, the way you talk, the way you exist—it all has this calm, comforting magic that makes things feel lighter. I hope you’re taking care of yourself today, drinking enough water, resting when you need to, and remembering that you don’t always have to be strong.</p>
+            <p>You deserve softness, patience, and little moments of peace. And whenever you feel tired or overwhelmed, just know there’s someone out here who genuinely wants you to be okay, to feel appreciated, and to smile a little more.</p>
+            <p>Be gentle with yourself… you’re doing better than you think 🤍✨</p>
+            <button class="btn-heart" style="width:100%" onclick="nextSlide(5)">Continue</button>
+        </div>
+    </div>
+
+    <div class="slide" id="slide5">
+        <div class="one-more-box" onclick="nextSlide(6)">
+            <h2 class="script-font" style="margin:0;">One more thing... ✨</h2>
+        </div>
+    </div>
+
+    <div class="slide" id="slide6">
+        <h1 class="typewriter-text">You'll be always special to me</h1>
+        <div style="font-size: 3rem; margin-top: 20px;">🌸✨🤍💐🌳</div>
+    </div>
+
+    <script>
+        // Petal generation
+        const petalsContainer = document.getElementById('petals-container');
+        for (let i = 0; i < 25; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.width = Math.random() * 15 + 10 + 'px';
+            petal.style.height = petal.style.width;
+            petal.style.animationDuration = Math.random() * 3 + 3 + 's';
+            petal.style.animationDelay = Math.random() * 5 + 's';
+            petalsContainer.appendChild(petal);
+        }
+
+        function nextSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById('slide' + n).classList.add('active');
+            if(n === 2) handleScale();
+            if(n === 6) {
+                confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 }, colors: ['#880d1e', '#ffb6c1'] });
+            }
+        }
+
+        function handleScale() {
+            const meter = document.getElementById('meter');
+            const status = document.getElementById('status-text');
+            const overflow = document.getElementById('overflow-msg');
+            const btn = document.getElementById('next2');
+            setTimeout(() => {
+                meter.style.transition = "width 3s ease-in-out";
+                meter.style.width = "100%";
+                status.innerText = "100%...";
+                setTimeout(() => {
+                    meter.style.width = "250%"; 
+                    meter.style.background = "#ff4d6d";
+                    status.innerText = "SCALE BROKEN!";
+                    overflow.style.display = "block";
+                    btn.style.display = "inline-block";
+                    confetti({ particleCount: 50, colors: ['#ffb6c1'] });
+                }, 3200);
+            }, 500);
+        }
+
+        let revealed = 0;
+        function revealMsg(el, text) {
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                el.classList.add('revealed');
+                el.innerText = text;
+                revealed++;
+                if (revealed === 5) document.getElementById('next3').style.display = 'block';
+            }
+        }
+
+        function openEnvelope() {
+            document.getElementById('envelope-wrapper').style.display = 'none';
+            document.getElementById('letter').style.display = 'block';
+            confetti({ particleCount: 150, spread: 60 });
+        }
+    </script>
+</body>
+</html>
