@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Avinya 🌸</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --soft-pink: #ffe4e1;
+            --deep-pink: #ffb6c1;
+            --nature-green: #a8dadc;
+            --text-color: #5d5d5d;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe4e1 100%);
+            overflow: hidden;
+            color: var(--text-color);
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .active { display: flex; }
+
+        /* Nature Elements */
+        .decor { position: absolute; font-size: 2rem; z-index: -1; opacity: 0.6; }
+        .flower1 { top: 10%; left: 10%; }
+        .flower2 { bottom: 10%; right: 10%; }
+        .tree { bottom: 0; left: 50%; transform: translateX(-50%); font-size: 5rem; opacity: 0.2; }
+
+        /* Typewriter Effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid pink;
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .10em;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: pink; } }
+
+        /* Progress Bar Slide 2 */
+        .scale-container {
+            width: 80%;
+            height: 30px;
+            background: #eee;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 20px;
+            border: 2px solid var(--deep-pink);
+        }
+        .scale-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--deep-pink);
+            transition: width 3s ease-in;
+        }
+
+        /* Message Boxes Slide 3 */
+        .msg-grid {
+            display: grid;
+            gap: 10px;
+            max-width: 400px;
+        }
+        .msg-box {
+            background: var(--deep-pink);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .msg-box.hidden { background: #ffc0cb; color: transparent; }
+        .msg-box.hidden::after { content: "Tap to open ✨"; color: white; font-size: 0.8rem; }
+
+        /* Envelope Slide 4 */
+        .envelope-wrapper { cursor: pointer; position: relative; }
+        .heart-seal { font-size: 4rem; cursor: pointer; transition: transform 0.3s; }
+        .heart-seal:hover { transform: scale(1.2); }
+        .letter {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            max-width: 500px;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 10px 25px;
+            border: none;
+            background: var(--deep-pink);
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        h1 { font-weight: 300; }
+    </style>
+</head>
+<body>
+
+    <div class="decor flower1">🌸</div>
+    <div class="decor flower2">💐</div>
+    <div class="decor tree">🌳</div>
+
+    <div class="slide active" id="slide1">
+        <h1 class="typewriter">Hey Avinya...</h1>
+        <p>Do you know how beautiful you are?</p>
+        <button onclick="nextSlide(2)">Yes, tell me more</button>
+    </div>
+
+    <div class="slide" id="slide2">
+        <h1>Measuring your cuteness...</h1>
+        <div class="scale-container">
+            <div id="meter" class="scale-fill"></div>
+        </div>
+        <h2 id="scale-text" style="margin-top: 20px; opacity: 0;">100%</h2>
+        <h1 id="overflow-text" style="display:none; color: #ff4d6d;">TOO PRETTY TO HANDLE! 🔥</h1>
+        <button id="btn2" style="display:none" onclick="nextSlide(3)">Continue</button>
+    </div>
+
+    <div class="slide" id="slide3">
+        <h1>Some things about you...</h1>
+        <div class="msg-grid">
+            <div class="msg-box hidden" onclick="reveal(this)">you look adorable</div>
+            <div class="msg-box hidden" onclick="reveal(this)">you have the sweetest vibe</div>
+            <div class="msg-box hidden" onclick="reveal(this)">you make things feel lighter</div>
+            <div class="msg-box hidden" onclick="reveal(this)">you are naturally charming</div>
+            <div class="msg-box hidden" onclick="reveal(this)">you make everything feel special</div>
+        </div>
+        <button id="btn3" style="display:none" onclick="nextSlide(4)">Next 🌸</button>
+    </div>
+
+    <div class="slide" id="slide4">
+        <div class="envelope-wrapper" id="envelope" onclick="openLetter()">
+            <div class="heart-seal">❤️</div>
+            <p>Click the heart to open</p>
+        </div>
+        <div class="letter" id="letter">
+            <h3>Hey you 🌸</h3>
+            <p>I just want you to know how genuinely special you are. The way you smile, the way you talk, the way you exist—it all has this calm, comforting magic that makes things feel lighter. I hope you’re taking care of yourself today, drinking enough water, resting when you need to, and remembering that you don’t always have to be strong.</p>
+            <p>You deserve softness, patience, and little moments of peace. And whenever you feel tired or overwhelmed, just know there’s someone out here who genuinely wants you to be okay, to feel appreciated, and to smile a little more.</p>
+            <p>Be gentle with yourself… you’re doing better than you think 🤍✨</p>
+            <button onclick="nextSlide(5)">Close</button>
+        </div>
+    </div>
+
+    <div class="slide" id="slide5">
+        <h1 class="typewriter">You're always special to me</h1>
+        <div style="font-size: 3rem;">🌸✨🤍</div>
+    </div>
+
+    <script>
+        let revealedCount = 0;
+
+        function nextSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById('slide' + n).classList.add('active');
+
+            if(n === 2) startMeter();
+            if(n === 5) fireConfetti();
+        }
+
+        function startMeter() {
+            const meter = document.getElementById('meter');
+            const text = document.getElementById('scale-text');
+            const overflow = document.getElementById('overflow-text');
+            const btn = document.getElementById('btn2');
+            
+            meter.style.width = '100%';
+            text.style.opacity = '1';
+            
+            setTimeout(() => {
+                meter.style.width = '150%';
+                meter.style.background = '#ff4d6d';
+                text.innerText = "ERROR: SCALE BROKEN! 1000000%";
+                overflow.style.display = 'block';
+                btn.style.display = 'inline-block';
+                fireConfetti();
+            }, 3000);
+        }
+
+        function reveal(el) {
+            if(el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                revealedCount++;
+                if(revealedCount === 5) document.getElementById('btn3').style.display = 'block';
+            }
+        }
+
+        function openLetter() {
+            document.getElementById('envelope').style.display = 'none';
+            document.getElementById('letter').style.display = 'block';
+            fireConfetti();
+        }
+
+        function fireConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ffb6c1', '#ff69b4', '#ffffff']
+            });
+        }
+    </script>
+</body>
+</html>
