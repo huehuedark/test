@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Avinya 🌸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --deep-rose: #880d1e;
+            --nature-pink: #ffb6c1;
+            --soft-pink: #ffe5ec;
+            --leaf-green: #95d5b2;
+            --sky-pink: #ffc8dd;
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            font-family: 'Quicksand', sans-serif;
+            background: var(--soft-pink);
+            overflow: hidden;
+            color: #333;
+        }
+
+        /* --- Nature Background --- */
+        .scenery {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, var(--sky-pink) 0%, var(--soft-pink) 100%);
+            z-index: -10;
+        }
+
+        .cloud {
+            position: absolute; background: white; width: 100px; height: 40px;
+            border-radius: 50px; opacity: 0.7; z-index: -9;
+            animation: floatCloud 35s linear infinite;
+        }
+        .cloud::after { content: ''; position: absolute; background: white; width: 50px; height: 50px; border-radius: 50%; top: -25px; left: 15px; }
+
+        @keyframes floatCloud { from { left: -150px; } to { left: 110vw; } }
+
+        .tree { position: absolute; bottom: 20px; font-size: 4rem; z-index: -8; animation: sway 4s ease-in-out infinite; transform-origin: bottom; opacity: 0.8; }
+        @keyframes sway { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(3deg); } }
+
+        .bird { position: absolute; top: 15%; font-size: 1.2rem; z-index: -8; animation: fly 18s linear infinite; opacity: 0.6; }
+        @keyframes fly { 0% { left: -10%; } 100% { left: 110%; } }
+
+        .falling-element {
+            position: fixed; top: -10%; z-index: -5;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+        .petal { background: var(--nature-pink); border-radius: 150% 0 150% 0; opacity: 0.7; }
+        .leaf { background: var(--leaf-green); border-radius: 0 100% 0 100%; opacity: 0.6; }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg) translateX(0); }
+            100% { transform: translateY(110vh) rotate(360deg) translateX(50px); }
+        }
+
+        .garden {
+            position: fixed; bottom: -10px; width: 100%; height: 60px;
+            display: flex; justify-content: space-around; z-index: -7;
+            font-size: 2rem; opacity: 0.9;
+        }
+
+        /* --- Typewriter Effect --- */
+        .typewriter {
+            font-family: 'Dancing Script', cursive;
+            color: var(--deep-rose);
+            border-right: 3px solid var(--deep-rose);
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            width: 0;
+        }
+        .animate-type { animation: typing 2.5s steps(30, end) forwards, blink 0.8s infinite; }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink { 50% { border-color: transparent } }
+
+        /* --- UI Styles --- */
+        .slide {
+            display: none; height: 100vh; width: 100%;
+            flex-direction: column; justify-content: center;
+            align-items: center; text-align: center;
+            padding: 20px; box-sizing: border-box;
+            backdrop-filter: blur(1px);
+        }
+        .active { display: flex; }
+
+        .btn-heart {
+            background: var(--deep-rose); color: white;
+            border: none; padding: 15px 30px; border-radius: 50px;
+            font-size: 1.1rem; cursor: pointer; margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .meter-container {
+            width: 250px; height: 25px; background: #fff;
+            border-radius: 15px; border: 2px solid var(--deep-rose); overflow: hidden; margin-top: 10px;
+        }
+        .meter-fill { width: 0; height: 100%; background: var(--deep-rose); transition: width 0.1s linear; }
+
+        .msg-grid { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 320px; }
+        .msg-box { 
+            background: #2b0101; color: white; padding: 12px; 
+            border-radius: 10px; cursor: pointer; transition: 0.3s; 
+            font-size: 0.9rem; font-weight: 500;
+        }
+        .msg-box.revealed { background: white; color: var(--deep-rose); border: 2px solid var(--deep-rose); font-weight: 600; }
+
+        .envelope {
+            width: 260px; height: 160px; background: #ffafcc; border-radius: 10px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); border: 2px solid #ff8fab;
+        }
+        .heart-seal { font-size: 50px; animation: pulse 1.5s infinite; position: relative; }
+        .seal-text { font-size: 10px; color: white; position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; }
+
+        .letter-content {
+            display: none; background: white; padding: 25px; border-radius: 15px;
+            max-width: 90%; text-align: left; line-height: 1.6; font-size: 0.9rem;
+            border-top: 8px solid var(--deep-rose); box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .wrap-text { white-space: normal !important; width: 90% !important; border: none !important; animation: fadeIn 2s forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+    </style>
+</head>
+<body>
+
+    <div class="scenery">
+        <div class="cloud" style="top: 10%; animation-duration: 40s;"></div>
+        <div class="cloud" style="top: 25%; animation-duration: 60s; animation-delay: -10s;"></div>
+        <div class="tree" style="left: 5%;">🌳</div>
+        <div class="tree" style="right: 5%;">🌸</div>
+        <div class="bird" style="animation-duration: 20s;">🕊️</div>
+        <div class="bird" style="animation-duration: 25s; animation-delay: -5s; top: 35%;">🕊️</div>
+    </div>
+
+    <div class="garden">
+        <span>🌸</span><span>🌷</span><span>🌹</span><span>🌺</span><span>🌻</span><span>🌼</span><span>🌷</span>
+    </div>
+    
+    <div id="elements-container"></div>
+
+    <div class="slide active" id="slide1">
+        <h1 class="typewriter animate-type">Hey Avinya...</h1>
+        <h2 class="script-font">Do you know how beautiful you are?</h2>
+        <button class="btn-heart" onclick="nextSlide(2)">Open my heart ❤️</button>
+    </div>
+
+    <div class="slide" id="slide2">
+        <h2 class="typewriter" id="type2">Measuring cuteness...</h2>
+        <div class="meter-container"><div id="meter" class="meter-fill"></div></div>
+        <h3 id="counter" style="margin-top: 10px; font-weight: bold;">0%</h3>
+        <h1 id="overflow-msg" style="display:none; color: var(--deep-rose); font-size: 1.5rem;">LIMIT BROKEN! ❤️🔥</h1>
+        <button id="next2" style="display:none" class="btn-heart" onclick="nextSlide(3)">Continue 🌸</button>
+    </div>
+
+    <div class="slide" id="slide3">
+        <h2 class="typewriter" id="type3">Tap for you, Avinya...</h2>
+        <div class="msg-grid">
+            <div class="msg-box" onclick="revealMsg(this, 'A — Always making my day better')">A ✨</div>
+            <div class="msg-box" onclick="revealMsg(this, 'V — Very precious and one of a kind')">V ✨</div>
+            <div class="msg-box" onclick="revealMsg(this, 'I — Incredibly kind-hearted')">I ✨</div>
+            <div class="msg-box" onclick="revealMsg(this, 'N — Naturally beautiful inside and out')">N ✨</div>
+            <div class="msg-box" onclick="revealMsg(this, 'Y — Your smile is my favorite thing')">Y ✨</div>
+            <div class="msg-box" onclick="revealMsg(this, 'A — Absolutely perfect just as you are')">A ✨</div>
+        </div>
+        <button id="next3" style="display:none" class="btn-heart" onclick="nextSlide(4)">Next</button>
+    </div>
+
+    <div class="slide" id="slide4">
+        <h2 class="typewriter" id="type4">A message for you...</h2>
+        <div id="envelope-wrapper" onclick="openEnvelope()" style="margin-top: 20px;">
+            <div class="envelope">
+                <span style="color:white; font-family:'Dancing Script'; font-size: 1.4rem;">a note for you</span>
+                <div class="heart-seal">❤️<span class="seal-text">TAP</span></div>
+            </div>
+        </div>
+        <div id="letter" class="letter-content">
+            <p><strong>Hey you 🌸</strong></p>
+            <p>I just want you to know how genuinely special you are. The way you smile, the way you talk, the way you exist—it all has this calm, comforting magic that makes things feel lighter. I hope you’re taking care of yourself today, drinking enough water, resting when you need to, and remembering that you don’t always have to be strong.</p>
+            <p>You deserve softness, patience, and little moments of peace. And whenever you feel tired or overwhelmed, just know there’s someone out here who genuinely wants you to be okay, to feel appreciated, and to smile a little more.</p>
+            <p>Be gentle with yourself… you’re doing better than you think 🤍✨</p>
+            <button class="btn-heart" style="width:100%" onclick="nextSlide(5)">Continue</button>
+        </div>
+    </div>
+
+    <div class="slide" id="slide5">
+        <h2 class="typewriter" id="type5">Just one more...</h2>
+        <div style="background: white; border: 2px dashed var(--deep-rose); padding: 30px; border-radius: 20px; cursor: pointer; margin-top: 15px;" onclick="nextSlide(6)">
+            <h2 class="script-font" style="margin:0;">One more thing... ✨</h2>
+        </div>
+    </div>
+
+    <div class="slide" id="slide6">
+        <h1 class="typewriter wrap-text" id="final-text">You'll be always <br> special to me</h1>
+        <div style="font-size: 2.5rem; margin-top: 15px;">🌸✨🤍</div>
+    </div>
+
+    <script>
+        // Generate Petals & Leaves
+        const container = document.getElementById('elements-container');
+        function createFallingElement() {
+            const el = document.createElement('div');
+            const isPetal = Math.random() > 0.4;
+            el.className = `falling-element ${isPetal ? 'petal' : 'leaf'}`;
+            el.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 10 + 10;
+            el.style.width = size + 'px'; el.style.height = size + 'px';
+            el.style.animationDuration = Math.random() * 3 + 4 + 's';
+            container.appendChild(el);
+            setTimeout(() => el.remove(), 7000);
+        }
+        setInterval(createFallingElement, 400);
+
+        function nextSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            const currentSlide = document.getElementById('slide' + n);
+            currentSlide.classList.add('active');
+
+            const tw = currentSlide.querySelector('.typewriter');
+            if(tw && n !== 6) {
+                tw.classList.remove('animate-type');
+                void tw.offsetWidth;
+                tw.classList.add('animate-type');
+            }
+
+            if(n === 2) startScale();
+            if(n === 6) confetti({ particleCount: 200, spread: 70, origin: { y: 0.8 } });
+        }
+
+        function startScale() {
+            let count = 0;
+            const counterEl = document.getElementById('counter');
+            const meter = document.getElementById('meter');
+            const interval = setInterval(() => {
+                count++;
+                counterEl.innerText = count + "%";
+                meter.style.width = Math.min(count, 100) + "%";
+                if(count === 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        let breakCount = 100;
+                        const glitch = setInterval(() => {
+                            breakCount += Math.floor(Math.random() * 50);
+                            counterEl.innerText = breakCount + "%";
+                            meter.style.width = "300%";
+                            meter.style.background = "#ff4d6d";
+                            if(breakCount > 1000) {
+                                clearInterval(glitch);
+                                counterEl.innerText = "∞ %";
+                                document.getElementById('overflow-msg').style.display = "block";
+                                document.getElementById('next2').style.display = "block";
+                                confetti({ particleCount: 100 });
+                            }
+                        }, 50);
+                    }, 500);
+                }
+            }, 30);
+        }
+
+        let revealed = 0;
+        function revealMsg(el, text) {
+            if (!el.classList.contains('revealed')) {
+                el.innerText = text; el.classList.add('revealed'); revealed++;
+                if (revealed === 6) document.getElementById('next3').style.display = 'block';
+            }
+        }
+
+        function openEnvelope() {
+            document.getElementById('envelope-wrapper').style.display = 'none';
+            document.getElementById('letter').style.display = 'block';
+            confetti({ particleCount: 100 });
+        }
+    </script>
+</body>
+</html>
